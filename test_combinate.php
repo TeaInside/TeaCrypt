@@ -34,7 +34,6 @@ for ($i=1; $i <= 100000; $i++) {
 	print "data length: ".$i."; key length: ".strlen($key)."\n";
 	$v or print "raw data: ".$data."\n";
 	$encrypted = trim(shell_exec($encryptor." encrypt \"{$data}\" \"{$key}\""));
-	// var_dump($encrypted);die;
 	$v or print "encrypted: ".$encrypted."\n";
 	$decrypted = trim(shell_exec($decryptor." decrypt \"{$encrypted}\" \"{$key}\""));
 	$v or print "decrypted: ".$decrypted."\n";
@@ -45,10 +44,9 @@ for ($i=1; $i <= 100000; $i++) {
 	}
 }
 
-
-
-
 /**
+ * Generate random string.
+ *
  * @param int 	 $n
  * @param string $e
  * @return string

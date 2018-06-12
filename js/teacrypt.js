@@ -1,3 +1,9 @@
+/**
+ * @author hrwn <herwin1334@gmail.com>
+ * @link https://github.com/hrwn
+ * @license MIT
+ * @package TeaCrypt
+ */
 const chr = function (codePt) {
   if (codePt > 0xFFFF) {
     codePt -= 0x10000;
