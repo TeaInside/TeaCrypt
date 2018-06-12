@@ -1,0 +1,10 @@
+
+
+#ifndef STRREV_H_E18A170ABB95BAB10F2D9EA2469E0785D128465D
+#define STRREV_H_E18A170ABB95BAB10F2D9EA2469E0785D128465D
+
+#include <string>
+
+std::string strrev(std::string line);
+
+#endif
