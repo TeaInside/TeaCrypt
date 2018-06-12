@@ -1,7 +1,8 @@
 <?php
 
 if (! isset($argv[1], $argv[2])) {
-	# code...
+	echo "Parameter required!\n";
+	exit(1);
 }
 
 $binary = [

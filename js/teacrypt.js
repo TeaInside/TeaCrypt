@@ -29,34 +29,29 @@ class teacrypt {
     return r;
   };
   static encrypt (string, key, binarySafe = 1){
-      var r = "", newKey = "",
-          cost = 1,
-          // salt = teacrypt.saltGenerator(),
-          salt = "12345",
-          key = key + salt;
-      
-      for(let i=0,j=0,k=0; i < string.length; i++){
+      var slen = string.length, klen = key.length, r = "", newKey = "", salt = teacrypt.saltGenerator(), cost = 1;
+      for(let i = 0, j = 0; i < klen; i++){ 
+          newKey += chr(ord(key[i]) ^ ord(salt[j++]));
+          if(j === 5){
+              j = 0;
+          }
+      }
+      for(let i = 0, j = 0, k = 0; i < slen; i++){
           r += chr(
-                ord(string[i]) ^ ord(key[j]) ^ ord(salt[k]) ^
-                (((j + 2) << 2) ^ ((key.length % (i + 1)) << 2))
+                ord(string[i]) ^ ord(newKey[j++]) ^ ord(salt[k++]) ^ 
+                (i << j) ^ (k >> j) ^ (slen % cost) ^ (cost >> j) ^ (cost >> i) ^ (cost >> k) ^
+                (cost ^ ( slen % (i + j + k + 1))) ^ ((cost << i) % 2) ^ ((cost << j) % 2) ^
+                ((cost << k) % 2) ^ ((cost * (i + j + k)) % 3)
               );
-          
-          j++; k++;
-
-          if ((j % 2) === 0) {
-            cost++;
+          cost++;
+          if(j === klen){
+              j = 0;
           }
-
-          if (j === key.length) {
-            j = 0;
-          }
-
-          if (k === 5) {
-            k = 0;
+          if(k === 5){
+              k = 0; 
           }
       }
       r += salt;
-      // console.log(r);process.exit();
       if(binarySafe){
           return Buffer.from(r).toString('base64').split("").reverse().join("");
       } else {
@@ -72,28 +67,29 @@ class teacrypt {
       var slen = string.length,
           salt = string.substr(slen - 5),
           string = string.substr(0, slen = slen - 5),
-          key = key + salt,
-          newKey = "", r = "",
+          klen = key.length,
+          newKey = "",
+          r = "",
           cost = 1;
-      for(let i=0,j=0,k=0; i < string.length; i++){
+      for(let i = 0, j = 0; i < klen; i++){ 
+          newKey += chr(ord(key[i]) ^ ord(salt[j++]));
+              if(j === 5){
+                  j = 0;
+              }
+      }
+      for(let i = 0,j = 0, k = 0; i < slen; i++){
           r += chr(
-                ord(string[i]) ^ ord(key[j]) ^ ord(salt[k]) ^
-                /*(((j + 2) << 2)) ^*/ /*((key.length % (i + 1)) << 2)*/
-                (key.length % (i + 1))
+                ord(string[i]) ^ ord(newKey[j++]) ^ ord(salt[k++]) ^ 
+                (i << j) ^ (k >> j) ^ (slen % cost) ^ (cost >> j) ^ (cost >> i) ^ (cost >> k) ^
+                (cost ^ ( slen % (i + j + k + 1))) ^ ((cost << i) % 2) ^ ((cost << j) % 2) ^
+                ((cost << k) % 2) ^ ((cost * (i + j + k)) % 3)
               );
-          
-          j++; k++;
-
-          if ((j % 2) === 0) {
-            cost++;
+          cost++;
+          if(j === klen){
+              j = 0;
           }
-
-          if (j === key.length) {
-            j = 0;
-          }
-
-          if (k === 5) {
-            k = 0;
+          if(k === 5){
+              k = 0; 
           }
       }
       return r;
